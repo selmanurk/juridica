@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Juridica Hukuk & Danışmanlık — Hukuk Bürosu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ivory:   #f5f0e8;
+      --ivory2:  #ede8df;
+      --white:   #ffffff;
+      --ink:     #1c1c1c;
+      --ink2:    #2e2e2e;
+      --brass:   #9a7b4f;
+      --brass2:  #b8975e;
+      --muted:   #6b6560;
+      --border:  rgba(154,123,79,0.2);
+      --nav-h:   70px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--ivory);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      height: var(--nav-h);
+      background: var(--ivory);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 56px;
+      border-bottom: 1px solid rgba(154,123,79,0.15);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 32px rgba(28,28,28,0.08); }
+
+    .nav-logo {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.25s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--brass);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      font-size: 0.72rem !important;
+      font-weight: 600 !important;
+      color: var(--white) !important;
+      background: var(--ink);
+      padding: 10px 22px;
+      letter-spacing: 0.1em !important;
+      transition: background 0.25s !important;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { background: var(--brass) !important; color: var(--white) !important; }
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .hero-photo {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600&auto=format&fit=crop&q=80');
+      background-size: cover;
+      background-position: center 30%;
+      z-index: 0;
+      transform: scale(1.04);
+      transition: transform 8s ease-out;
+    }
+    .hero-photo.loaded { transform: scale(1); }
+
+    #shaderCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.68;
+    }
+
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(28,28,28,0.2) 0%,
+        rgba(28,28,28,0.45) 50%,
+        rgba(28,28,28,0.78) 100%
+      );
+      z-index: 2;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 860px;
+      padding: 0 32px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brass2);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.2s forwards;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: '';
+      display: block;
+      width: 36px; height: 1px;
+      background: var(--brass2);
+      opacity: 0.6;
+    }
+
+    .hero-h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(2.6rem, 6.5vw, 5.6rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: #f8f4ee;
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.45s forwards;
+    }
+
+    .hero-sub {
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: rgba(245,240,232,0.7);
+      margin-bottom: 44px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.68s forwards;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.9s forwards;
+    }
+
+    .btn-brass {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--brass);
+      padding: 14px 34px;
+      text-decoration: none;
+      border: 1px solid var(--brass);
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .btn-brass:hover { background: var(--brass2); border-color: var(--brass2); }
+
+    .btn-outline-light {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.9);
+      background: transparent;
+      padding: 14px 34px;
+      text-decoration: none;
+      border: 1px solid rgba(245,240,232,0.35);
+      transition: border-color 0.25s, color 0.25s;
+    }
+    .btn-outline-light:hover { border-color: var(--brass2); color: var(--brass2); }
+
+    .hero-stats-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 3;
+      background: rgba(28,28,28,0.75);
+      backdrop-filter: blur(8px);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(154,123,79,0.25);
+      opacity: 0;
+      animation: fadeUp 0.9s 1.1s forwards;
+    }
+
+    .hero-stat {
+      padding: 22px 24px;
+      text-align: center;
+      border-right: 1px solid rgba(154,123,79,0.15);
+      transition: background 0.25s;
+    }
+    .hero-stat:last-child { border-right: none; }
+    .hero-stat:hover { background: rgba(154,123,79,0.1); }
+
+    .hero-stat-num {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--brass2);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .hero-stat-label {
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── SHARED ─────────────────────────────────────────────── */
+    .section-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--brass);
+    }
+
+    .section-heading {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(2rem, 3.8vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 0;
+    }
+
+    /* ── HAKKIMIZDA ─────────────────────────────────────────── */
+    #hakkimizda {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 75vh;
+    }
+
+    .about-img-col {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .about-img {
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transform: scale(1.06);
+      filter: brightness(0.88);
+      transition: transform 0.9s cubic-bezier(0.4,0,0.2,1), filter 0.5s;
+    }
+    .about-img-col.visible .about-img { transform: scale(1); filter: brightness(0.92); }
+
+    .about-text-col {
+      background: var(--ivory);
+      padding: 96px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .about-accent { width: 44px; height: 2px; background: var(--brass); margin: 24px 0 28px; }
+
+    .about-body {
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 18px;
+    }
+
+    .founding-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 36px;
+      padding: 16px 24px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      transition: box-shadow 0.3s, border-color 0.3s;
+    }
+    .founding-badge:hover { box-shadow: 0 4px 24px rgba(154,123,79,0.12); border-color: var(--brass); }
+
+    .badge-year {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--brass);
+      line-height: 1;
+    }
+
+    .badge-text {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ── HİZMETLER ──────────────────────────────────────────── */
+    #hizmetler {
+      background: var(--ivory2);
+      padding: 112px 56px;
+    }
+
+    .hizmetler-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: end;
+      margin-bottom: 64px;
+    }
+
+    .hizmetler-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.85;
+      align-self: end;
+    }
+
+    .hizmet-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .hizmet-card {
+      background: var(--white);
+      border-top: 2px solid var(--brass);
+      padding: 36px 30px;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .hizmet-card:hover {
+      box-shadow: 0 8px 40px rgba(154,123,79,0.15), 0 0 0 1px rgba(154,123,79,0.2);
+      transform: translateY(-4px);
+    }
+
+    .hizmet-icon {
+      width: 40px; height: 40px;
+      margin-bottom: 20px;
+      color: var(--brass);
+    }
+
+    .hizmet-name {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .hizmet-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ── AVUKATLAR ──────────────────────────────────────────── */
+    #avukatlar {
+      background: var(--ivory);
+      padding: 112px 56px;
+    }
+
+    #avukatlar .section-heading { margin-bottom: 56px; }
+
+    .avukat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .avukat-card {
+      background: var(--ink2);
+      border: 1px solid rgba(154,123,79,0.15);
+      padding: 44px 36px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: box-shadow 0.35s, border-color 0.35s, transform 0.35s;
+      cursor: default;
+    }
+    .avukat-card:hover {
+      border-color: var(--brass);
+      box-shadow: 0 12px 48px rgba(0,0,0,0.22), 0 0 0 1px var(--brass);
+      transform: translateY(-5px);
+    }
+
+    .avukat-monogram {
+      width: 72px; height: 72px;
+      background: rgba(154,123,79,0.12);
+      border: 1px solid rgba(154,123,79,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--brass2);
+      margin-bottom: 24px;
+      transition: background 0.3s;
+    }
+    .avukat-card:hover .avukat-monogram { background: rgba(154,123,79,0.2); }
+
+    .avukat-name {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f0ece5;
+      margin-bottom: 4px;
+    }
+
+    .avukat-title {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 20px;
+    }
+
+    .avukat-sep { width: 28px; height: 1px; background: rgba(154,123,79,0.3); margin-bottom: 16px; }
+
+    .avukat-bio {
+      font-size: 0.83rem;
+      color: rgba(240,236,229,0.5);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .avukat-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .tag {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--brass);
+      border: 1px solid rgba(154,123,79,0.3);
+      padding: 4px 10px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .avukat-card:hover .tag { border-color: rgba(154,123,79,0.5); }
+
+    /* ── REFERANSLAR ────────────────────────────────────────── */
+    #referanslar {
+      background: var(--ink);
+      padding: 112px 56px;
+    }
+
+    #referanslar .section-label { color: var(--brass2); }
+    #referanslar .section-label::before { background: var(--brass2); }
+    #referanslar .section-heading { color: #f0ece5; margin-bottom: 64px; }
+
+    .ref-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .ref-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(154,123,79,0.15);
+      padding: 40px 32px;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      cursor: default;
+    }
+    .ref-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      border-color: rgba(154,123,79,0.35);
+    }
+
+    .ref-mark {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 3.5rem;
+      line-height: 1;
+      color: var(--brass);
+      opacity: 0.4;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .ref-text {
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      font-size: 0.97rem;
+      color: rgba(240,236,229,0.75);
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+
+    .ref-author {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--brass2);
+    }
+
+    .ref-role {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: none;
+      color: rgba(240,236,229,0.35);
+      margin-top: 3px;
+    }
+
+    /* ── İLETİŞİM ───────────────────────────────────────────── */
+    #iletisim {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 70vh;
+    }
+
+    .iletisim-left {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .iletisim-photo {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=900&auto=format&fit=crop&q=80');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.35);
+      transform: scale(1.04);
+      transition: transform 0.8s ease;
+    }
+    .iletisim-left:hover .iletisim-photo { transform: scale(1); }
+
+    .iletisim-info {
+      position: relative;
+      z-index: 1;
+      padding: 80px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100%;
+      min-height: 480px;
+    }
+
+    .iletisim-info .section-label { color: var(--brass2); }
+    .iletisim-info .section-label::before { background: var(--brass2); }
+    .iletisim-info .section-heading { color: #f0ece5; margin-bottom: 40px; font-size: clamp(1.6rem, 3vw, 2.4rem); }
+
+    .ci-item { margin-bottom: 24px; }
+
+    .ci-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brass2);
+      margin-bottom: 4px;
+    }
+
+    .ci-value {
+      font-size: 0.93rem;
+      color: rgba(240,236,229,0.75);
+      line-height: 1.6;
+    }
+    .ci-value a { color: inherit; text-decoration: none; }
+    .ci-value a:hover { color: var(--brass2); }
+
+    .iletisim-right {
+      background: var(--white);
+      padding: 80px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .iletisim-right .section-label { margin-bottom: 12px; }
+    .iletisim-right .section-heading { margin-bottom: 40px; }
+
+    .cf { display: flex; flex-direction: column; gap: 28px; }
+
+    .cf-field {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .cf-field label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .cf-field input,
+    .cf-field textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(28,28,28,0.15);
+      padding: 10px 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.3s;
+      resize: none;
+    }
+    .cf-field input::placeholder,
+    .cf-field textarea::placeholder { color: rgba(28,28,28,0.25); }
+    .cf-field input:focus,
+    .cf-field textarea:focus { border-bottom-color: var(--brass); }
+    .cf-field textarea { min-height: 100px; }
+
+    .cf-field::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: var(--brass);
+      transition: width 0.35s;
+    }
+    .cf-field:focus-within::after { width: 100%; }
+
+    .btn-submit {
+      align-self: flex-start;
+      margin-top: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--ink);
+      border: 1px solid var(--ink);
+      padding: 14px 36px;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s, transform 0.2s;
+    }
+    .btn-submit:hover { background: var(--brass); border-color: var(--brass); transform: translateY(-2px); }
+
+    .form-msg {
+      display: none;
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: var(--brass);
+      border-left: 2px solid var(--brass);
+      padding-left: 12px;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      color: rgba(240,236,229,0.4);
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 36px 56px;
+      border-bottom: 1px solid rgba(154,123,79,0.12);
+    }
+
+    .footer-logo {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f0ece5;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .footer-nav a {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(240,236,229,0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: var(--brass2); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 56px;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+    }
+    .footer-bottom a { color: inherit; text-decoration: none; }
+    .footer-bottom a:hover { color: var(--brass2); }
+
+    .footer-links { display: flex; gap: 24px; }
+
+    /* ── REVEAL ─────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.75s cubic-bezier(0.4,0,0.2,1),
+                  transform 0.75s cubic-bezier(0.4,0,0.2,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+    .reveal-d4 { transition-delay: 0.32s; }
+    .reveal-d5 { transition-delay: 0.40s; }
+    .reveal-d6 { transition-delay: 0.48s; }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 960px) {
+      nav { padding: 0 24px; }
+      .nav-links li:not(:last-child) { display: none; }
+
+      #hakkimizda { grid-template-columns: 1fr; }
+      .about-img-col { height: 320px; }
+      .about-text-col { padding: 56px 24px; }
+
+      #hizmetler { padding: 72px 24px; }
+      .hizmetler-top { grid-template-columns: 1fr; }
+      .hizmet-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+
+      #avukatlar { padding: 72px 24px; }
+      .avukat-grid { grid-template-columns: 1fr; }
+
+      #referanslar { padding: 72px 24px; }
+      .ref-grid { grid-template-columns: 1fr; }
+
+      #iletisim { grid-template-columns: 1fr; }
+      .iletisim-left { min-height: 320px; }
+      .iletisim-info { padding: 56px 24px 40px; min-height: 320px; }
+      .iletisim-right { padding: 56px 24px; }
+
+      .footer-top, .footer-bottom { padding: 24px; flex-direction: column; gap: 16px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+
+    @media (max-width: 600px) {
+      .hizmet-grid { grid-template-columns: 1fr; }
+      .hero-stats-bar { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">Juridica Hukuk & Danışmanlık</a>
+    <ul class="nav-links">
+      <li><a href="#hakkimizda">Hakkımızda</a></li>
+      <li><a href="#hizmetler">Hizmetler</a></li>
+      <li><a href="#avukatlar">Avukatlar</a></li>
+      <li><a href="#referanslar">Referanslar</a></li>
+      <li><a href="#iletisim" class="nav-cta">İletişim</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-photo" id="heroPhoto"></div>
+    <canvas id="shaderCanvas"></canvas>
+    <div class="hero-gradient"></div>
+
+    <div class="hero-content">
+      <p class="hero-tag">Juridica Hukuk & Danışmanlık — Hukuk Bürosu</p>
+      <h1 class="hero-h1">Haklarınızı<br>Kararlılıkla<br>Savunuyoruz.</h1>
+      <p class="hero-sub">23 yıllık deneyim ve uzman kadromuzla yanınızdayız.</p>
+      <div class="hero-btns">
+        <a href="#iletisim" class="btn-brass">Danışma Talep Et</a>
+        <a href="#hizmetler" class="btn-outline-light">Hizmetlerimiz</a>
+      </div>
+    </div>
+
+    <div class="hero-stats-bar">
+      <div class="hero-stat">
+        <div class="hero-stat-num">23</div>
+        <div class="hero-stat-label">Yıl Deneyim</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">1.400+</div>
+        <div class="hero-stat-label">Dava</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">%94</div>
+        <div class="hero-stat-label">Başarı Oranı</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">18</div>
+        <div class="hero-stat-label">Uzman Avukat</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HAKKIMIZDA -->
+  <section id="hakkimizda">
+    <div class="about-img-col">
+      <img
+        class="about-img"
+        src="https://images.unsplash.com/photo-1575505586569-646b2ca898fc?w=900&auto=format&fit=crop&q=80"
+        alt="Hukuk bürosu"
+        loading="lazy"
+      />
+    </div>
+    <div class="about-text-col">
+      <div class="section-label reveal">Hakkımızda</div>
+      <h2 class="section-heading reveal reveal-d1">23 Yıllık<br>Güven ve<br>Deneyim</h2>
+      <div class="about-accent reveal reveal-d2"></div>
+      <p class="about-body reveal reveal-d2">
+        Juridica Hukuk & Danışmanlık olarak 2001 yılından bu yana müvekkillerimize şeffaf, güvenilir
+        ve sonuç odaklı hukuki danışmanlık hizmeti sunuyoruz. Her davayı bireysel
+        bir sorumluluk olarak üstleniyor, en karmaşık süreçlerde bile yanınızda oluyoruz.
+      </p>
+      <p class="about-body reveal reveal-d3">
+        Uzman avukat kadromuz, hukukun tüm alanlarında kapsamlı bilgi birikimini
+        pratik deneyimle birleştirerek etkili ve kalıcı çözümler üretiyor.
+      </p>
+      <div class="founding-badge reveal reveal-d4">
+        <div class="badge-year">2001</div>
+        <div class="badge-text">Yılında Kuruldu<br>İstanbul, Türkiye</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HİZMETLER -->
+  <section id="hizmetler">
+    <div class="hizmetler-top">
+      <div>
+        <div class="section-label reveal">Uzmanlık Alanları</div>
+        <h2 class="section-heading reveal reveal-d1">Hizmet&shy;lerimiz</h2>
+      </div>
+      <p class="hizmetler-desc reveal reveal-d2">
+        Hukukun her dalında uzmanlaşmış avukatlarımızla kapsamlı, güvenilir ve
+        sonuç odaklı danışmanlık sunuyoruz.
+      </p>
+    </div>
+
+    <div class="hizmet-grid">
+      <div class="hizmet-card reveal">
+        <svg class="hizmet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div class="hizmet-name">Ceza Hukuku</div>
+        <p class="hizmet-desc">Soruşturma aşamasından temyize tüm ceza davalarında güçlü savunma ve etkin temsil.</p>
+      </div>
+      <div class="hizmet-card reveal reveal-d1">
+        <svg class="hizmet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        <div class="hizmet-name">Şirketler Hukuku</div>
+        <p class="hizmet-desc">Kuruluş, birleşme, devralma ve ticari sözleşmelerde kurumsal hukuki danışmanlık.</p>
+      </div>
+      <div class="hizmet-card reveal reveal-d2">
+        <svg class="hizmet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <div class="hizmet-name">Aile Hukuku</div>
+        <p class="hizmet-desc">Boşanma, velayet, nafaka ve miras davalarında hassas ve kararlı çözümler.</p>
+      </div>
+      <div class="hizmet-card reveal reveal-d3">
+        <svg class="hizmet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <div class="hizmet-name">Gayrimenkul Hukuku</div>
+        <p class="hizmet-desc">Tapu, kira anlaşmazlıkları, imar ve inşaat hukuku alanında kapsamlı danışmanlık.</p>
+      </div>
+      <div class="hizmet-card reveal reveal-d4">
+        <svg class="hizmet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <div class="hizmet-name">İş Hukuku</div>
+        <p class="hizmet-desc">İşçi-işveren ilişkileri, haksız fesih, kıdem tazminatı ve arabuluculuk hizmetleri.</p>
+      </div>
+      <div class="hizmet-card reveal reveal-d5">
+        <svg class="hizmet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <div class="hizmet-name">Vergi Hukuku</div>
+        <p class="hizmet-desc">Vergi uyuşmazlıkları, itiraz süreçleri ve vergi planlamasında uzman danışmanlık.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVUKATLAR -->
+  <section id="avukatlar">
+    <div class="section-label reveal">Ekibimiz</div>
+    <h2 class="section-heading reveal reveal-d1">Avukat&shy;larımız</h2>
+
+    <div class="avukat-grid">
+      <div class="avukat-card reveal">
+        <div class="avukat-monogram">KY</div>
+        <div class="avukat-name">Av. Kemal Yıldırım</div>
+        <div class="avukat-title">Kurucu Ortak</div>
+        <div class="avukat-sep"></div>
+        <p class="avukat-bio">23 yıllık deneyimiyle ceza ve ticaret hukuku alanında yüzlerce davayı başarıyla sonuçlandırdı.</p>
+        <div class="avukat-tags">
+          <span class="tag">Ceza Hukuku</span>
+          <span class="tag">Ticaret Hukuku</span>
+        </div>
+      </div>
+      <div class="avukat-card reveal reveal-d2">
+        <div class="avukat-monogram">DA</div>
+        <div class="avukat-name">Av. Deniz Arslan</div>
+        <div class="avukat-title">Ortak</div>
+        <div class="avukat-sep"></div>
+        <p class="avukat-bio">Aile ve gayrimenkul hukuku alanında uzmanlaşmış, müvekkil odaklı yaklaşımıyla tanınan avukat.</p>
+        <div class="avukat-tags">
+          <span class="tag">Aile Hukuku</span>
+          <span class="tag">Gayrimenkul</span>
+        </div>
+      </div>
+      <div class="avukat-card reveal reveal-d4">
+        <div class="avukat-monogram">MD</div>
+        <div class="avukat-name">Av. Murat Doğan</div>
+        <div class="avukat-title">Kıdemli Avukat</div>
+        <div class="avukat-sep"></div>
+        <p class="avukat-bio">Vergi ve iş hukuku alanında derin teknik bilgisiyle kurumsal müvekkillere stratejik danışmanlık sağlıyor.</p>
+        <div class="avukat-tags">
+          <span class="tag">Vergi Hukuku</span>
+          <span class="tag">İş Hukuku</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFERANSLAR -->
+  <section id="referanslar">
+    <div class="section-label reveal">Müvekkil Görüşleri</div>
+    <h2 class="section-heading reveal reveal-d1">Referanslar</h2>
+
+    <div class="ref-grid">
+      <div class="ref-card reveal">
+        <span class="ref-mark">"</span>
+        <p class="ref-text">İki yıl süren ticari davamızda Juridica Hukuk & Danışmanlık ekibi her adımda yanımızdaydı. Profesyonellik ve kararlılık bir arada — tam olarak ihtiyacımız olan buydu.</p>
+        <div class="ref-author">Ahmet Karadeniz <span class="ref-role">Genel Müdür, Karadeniz İnşaat A.Ş.</span></div>
+      </div>
+      <div class="ref-card reveal reveal-d2">
+        <span class="ref-mark">"</span>
+        <p class="ref-text">Boşanma sürecinde hem hukuki hem insani destek aldım. Av. Deniz Arslan süreci en az hasarla tamamlamama yardımcı oldu. Minnettarım.</p>
+        <div class="ref-author">Selin Yıldız <span class="ref-role">Özel Müvekkil</span></div>
+      </div>
+      <div class="ref-card reveal reveal-d4">
+        <span class="ref-mark">"</span>
+        <p class="ref-text">Vergi incelemesi sürecinde hem teknik bilgi hem de müzakere yetkinliği üst düzeydeydi. Sonuç beklentimizin çok üzerinde çıktı.</p>
+        <div class="ref-author">Tarık Özdemir <span class="ref-role">CFO, Özdemir Holding</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- İLETİŞİM -->
+  <section id="iletisim">
+    <div class="iletisim-left">
+      <div class="iletisim-photo"></div>
+      <div class="iletisim-info">
+        <div class="section-label reveal">Bize Ulaşın</div>
+        <h2 class="section-heading reveal reveal-d1">İletişim</h2>
+        <div class="ci-item reveal reveal-d2">
+          <div class="ci-label">Adres</div>
+          <div class="ci-value">Adalet Cad. No:42, Kat:3<br>Bağcılar, İstanbul</div>
+        </div>
+        <div class="ci-item reveal reveal-d3">
+          <div class="ci-label">Telefon</div>
+          <div class="ci-value"><a href="tel:+902121234567">+90 212 123 45 67</a></div>
+        </div>
+        <div class="ci-item reveal reveal-d4">
+          <div class="ci-label">E-Posta</div>
+          <div class="ci-value"><a href="mailto:demo@webdemos.com">demo@webdemos.com</a></div>
+        </div>
+        <div class="ci-item reveal reveal-d5">
+          <div class="ci-label">Çalışma Saatleri</div>
+          <div class="ci-value">Pzt – Cum: 09:00 – 18:00</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="iletisim-right">
+      <div class="section-label reveal">Mesaj Gönderin</div>
+      <h2 class="section-heading reveal reveal-d1">Danışma<br>Talep Et</h2>
+      <form class="cf" id="contactForm" style="margin-top:32px">
+        <div class="cf-field reveal reveal-d2">
+          <label for="ad">Ad Soyad</label>
+          <input type="text" id="ad" name="ad" placeholder="Adınız ve soyadınız" required/>
+        </div>
+        <div class="cf-field reveal reveal-d3">
+          <label for="email">E-Posta</label>
+          <input type="email" id="email" name="email" placeholder="eposta@ornek.com" required/>
+        </div>
+        <div class="cf-field reveal reveal-d4">
+          <label for="konu">Konu</label>
+          <input type="text" id="konu" name="konu" placeholder="Hukuki konuyu belirtin"/>
+        </div>
+        <div class="cf-field reveal reveal-d5">
+          <label for="mesaj">Mesajınız</label>
+          <textarea id="mesaj" name="mesaj" placeholder="Davanızı kısaca açıklayın..." required></textarea>
+        </div>
+        <button type="submit" class="btn-submit reveal reveal-d6">Gönder</button>
+        <div class="form-msg" id="formMsg">Mesajınız alındı. En kısa sürede dönüş yapacağız.</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <a href="#" class="footer-logo">Juridica Hukuk & Danışmanlık</a>
+      <ul class="footer-nav">
+        <li><a href="#hakkimizda">Hakkımızda</a></li>
+        <li><a href="#hizmetler">Hizmetler</a></li>
+        <li><a href="#avukatlar">Avukatlar</a></li>
+        <li><a href="#iletisim">İletişim</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 Juridica Hukuk & Danışmanlık Hukuk Bürosu. Tüm hakları saklıdır.</span>
+      <div class="footer-links">
+        <a href="#">Gizlilik Politikası</a>
+        <a href="#">Kullanım Koşulları</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  // ── WebGL Shader ──────────────────────────────────────────
+  (function() {
+    const canvas = document.getElementById('shaderCanvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) return;
+
+    const vs = `attribute vec2 p; void main(){gl_Position=vec4(p,0,1);}`;
+    const fs = `
+      precision mediump float;
+      uniform float t;
+      uniform vec2 r;
+
+      float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+
+      float noise(vec2 p){
+        vec2 i=floor(p), f=fract(p);
+        vec2 u=f*f*(3.-2.*f);
+        return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),
+                   mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);
+      }
+
+      float fbm(vec2 p){
+        float v=0.,a=.5;
+        mat2 m=mat2(1.6,1.2,-1.2,1.6);
+        for(int i=0;i<5;i++){v+=a*noise(p);p=m*p;a*=.5;}
+        return v;
+      }
+
+      void main(){
+        vec2 uv=gl_FragCoord.xy/r;
+        uv.y=1.-uv.y;
+        float s=t*.04;
+        vec2 q=vec2(fbm(uv+s),fbm(uv+vec2(1.7,9.2)));
+        vec2 rr=vec2(fbm(uv+2.*q+vec2(1.7+s*.15,9.2)),fbm(uv+2.*q+vec2(8.3+s*.1,2.8)));
+        float f=fbm(uv+2.5*rr);
+        vec3 c=mix(vec3(0.02,0.01,0.01),vec3(0.08,0.05,0.02),clamp(f*2.,0.,1.));
+        c=mix(c,vec3(0.25,0.18,0.08),clamp(f*f*4.,0.,1.));
+        vec2 vg=uv*2.-1.;
+        c*=(1.-dot(vg,vg)*.4);
+        gl_FragColor=vec4(c,0.75);
+      }
+    `;
+
+    function mkShader(type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src); gl.compileShader(s); return s;
+    }
+    const prog = gl.createProgram();
+    gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, vs));
+    gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, fs));
+    gl.linkProgram(prog); gl.useProgram(prog);
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,-1,1,1,-1,1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    const uT = gl.getUniformLocation(prog, 't');
+    const uR = gl.getUniformLocation(prog, 'r');
+
+    function resize() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const start = performance.now();
+    (function frame() {
+      gl.uniform1f(uT, (performance.now()-start)/1000);
+      gl.uniform2f(uR, canvas.width, canvas.height);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      requestAnimationFrame(frame);
+    })();
+  })();
+
+  // ── Hero photo loaded ─────────────────────────────────────
+  window.addEventListener('load', () => {
+    document.getElementById('heroPhoto').classList.add('loaded');
+  });
+
+  // ── Nav ───────────────────────────────────────────────────
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── IntersectionObserver ──────────────────────────────────
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ── About photo scale ─────────────────────────────────────
+  const aboutCol = document.querySelector('.about-img-col');
+  if (aboutCol) {
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) aboutCol.classList.add('visible');
+    }, { threshold: 0.15 }).observe(aboutCol);
+  }
+
+  // ── Contact Form → Supabase ───────────────────────────────
+  document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.btn-submit');
+    btn.textContent = 'Gönderiliyor...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('https://bibzedxuqpnfezfijmxu.supabase.co/rest/v1/contact_submissions', {
+        method: 'POST',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpYnplZHh1cXBuZmV6ZmlqbXh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDQxMjksImV4cCI6MjA5MjM4MDEyOX0.yttQ2IZYP0MqNHIUNXUOT5aRzOrP-TZWp5JkVZ063GY',
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          site_name: 'Juridica Hukuk & Danışmanlık',
+          to_email:  'demo@webdemos.com',
+          ad_soyad:  this.ad.value,
+          email:     this.email.value,
+          konu:      this.konu.value,
+          mesaj:     this.mesaj.value
+        })
+      });
+
+      if (res.ok || res.status === 201) {
+        document.getElementById('formMsg').style.display = 'block';
+        this.reset();
+        btn.textContent = 'Gönderildi ✓';
+      } else {
+        throw new Error();
+      }
+    } catch {
+      btn.textContent = 'Hata — Tekrar deneyin';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = 'Gönder'; }, 3000);
+    }
+  });
+  </script>
+</body>
+</html>
